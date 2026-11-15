@@ -1,0 +1,3 @@
+﻿  Source.c
+C:\Users\Елена\source\repos\Lab14\Lab14\Source.c(36,32): warning C4244: =: преобразование "double" в "float", возможна потеря данных
+  Lab14.vcxproj -> C:\Users\Елена\source\repos\Lab14\Debug\Lab14.exe
