@@ -1,89 +1,113 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <math.h>
-#include <locale.h>
 
-#define N 100 // Массив из 100 элементов
+#define N 1000   // РјР°РєСЃРёРјР°Р»СЊРЅС‹Р№ СЂР°Р·РјРµСЂ РјР°СЃСЃРёРІР°
 
 
-double calculate_y(double x) {
-    return (x * x) + (2.0 * 3.14159265358979323846 * cos(3.14159265358979323846 * x));
+
+// Р—Р°РїРѕР»РЅРµРЅРёРµ РјР°СЃСЃРёРІР° Р·РЅР°С‡РµРЅРёСЏРјРё
+double* full_elements(double *ptr_array, int n) {
+    for (int i = 0; i < n; i++) {
+        ptr_array[i] = (i + 1) * 1.5;   // РїСЂРёРјРµСЂ Р·Р°РїРѕР»РЅРµРЅРёСЏ
+    }
+    return ptr_array;
 }
 
+// РџРµС‡Р°С‚СЊ СЌР»РµРјРµРЅС‚РѕРІ РјР°СЃСЃРёРІР°
+int put_elements(double *ptr_array, int n) {
+    printf("Р­Р»РµРјРµРЅС‚С‹ РјР°СЃСЃРёРІР°:\n");
+    for (int i = 0; i < n; i++) {
+        printf("array[%d] = %.2f\n", i, ptr_array[i]);
+    }
+    return 0;
+}
+
+// РћР±СЂР°Р±РѕС‚РєР° СЌР»РµРјРµРЅС‚РѕРІ РјР°СЃСЃРёРІР°
+double* calc_elements(double *ptr_array, int n) {
+    double sum = 0.0;
+    for (int i = 0; i < n; i++) sum += ptr_array[i];
+    double avg = (n > 0) ? sum / n : 0.0;
+
+    printf("\nРћР±СЂР°Р±РѕС‚РєР° РјР°СЃСЃРёРІР°:\n");
+    printf("РЎСѓРјРјР° СЌР»РµРјРµРЅС‚РѕРІ = %.2f\n", sum);
+    printf("РЎСЂРµРґРЅРµРµ Р·РЅР°С‡РµРЅРёРµ = %.2f\n", avg);
+
+    for (int i = 0; i < n; i++) ptr_array[i] -= avg;
+    return ptr_array;
+}
+
+/* ---------- РќРѕРІС‹Рµ С„СѓРЅРєС†РёРё РёР· Р—Р°РґР°РЅРёСЏ 2 ---------- */
+
+// РЎСѓРјРјР° СЌР»РµРјРµРЅС‚РѕРІ РјР°СЃСЃРёРІР° СЃ РёРЅРґРµРєСЃР° begin РїРѕ end РІРєР»СЋС‡РёС‚РµР»СЊРЅРѕ
+double sum_elements(double *ptr_array, int begin, int end) {
+    // Р—Р°С‰РёС‚Р° РѕС‚ РЅРµРєРѕСЂСЂРµРєС‚РЅС‹С… РіСЂР°РЅРёС†
+    if (begin < 0) begin = 0;
+    if (end < begin) return 0.0;
+
+    double sum = 0.0;
+    for (int i = begin; i <= end; i++) {
+        sum += ptr_array[i];
+    }
+    return sum;
+}
+
+
+int find_element(double *ptr_array, int n, double element) {
+    for (int i = 0; i < n; i++) {
+   
+        if (fabs(ptr_array[i] - element) < 1e-9) {
+            return i;
+        }
+    }
+    return -1;
+}
+
+
+
 int main(void) {
-    setlocale(LC_ALL, "Russian");
+    double array[N];
+    int size;
 
-    double arr[N];
-    double x_start = 0.1; // Начало интервала
-    double x_end = 2.5;   // Конец интервала
-    double step;
-
-    // 1) В качестве приглашения к вводу вывести вычисляемую функцию
-    printf("Программа табулирования функции: y = x^2 + 2*pi*cos(pi*x)\n");
-    printf("Интервал: [%.1f; %.1f]\n\n", x_start, x_end);
-
-    // 2) Организовать возможность ввода значения шага табуляции
-    printf("Введите шаг табуляции (например, 0.024 для 100 элементов): ");
-    if (scanf("%lf", &step) != 1 || step <= 0) {
-        printf("Ошибка: шаг должен быть положительным числом.\n");
+    printf("Р’РІРµРґРёС‚Рµ СЂР°Р·РјРµСЂ РјР°СЃСЃРёРІР° > ");
+    if (scanf("%d", &size) != 1 || size <= 0 || size > N) {
+        printf("РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ СЂР°Р·РјРµСЂ РјР°СЃСЃРёРІР°!\n");
         return 1;
     }
 
-    // Проверка
-    if (x_start + (N - 1) * step > x_end + 1e-9) {
-        printf("Предупреждение: при таком шаге массив выйдет за пределы интервала [0.1; 2.5].\n");
+    // Р—Р°РїРѕР»РЅРµРЅРёРµ Рё РїРµС‡Р°С‚СЊ
+    full_elements(array, size);
+    put_elements(array, size);
+
+   
+    calc_elements(array, size);
+    put_elements(array, size);
+
+    int begin, end;
+    printf("\nР’РІРµРґРёС‚Рµ begin Рё end РґР»СЏ СЃСѓРјРјС‹ (0 <= begin <= end < %d) > ", size);
+    if (scanf("%d %d", &begin, &end) != 2) {
+        printf("РћС€РёР±РєР° РІРІРѕРґР° РіСЂР°РЅРёС†!\n");
+        return 1;
+    }
+    if (begin < 0 || end >= size || begin > end) {
+        printf("РќРµРєРѕСЂСЂРµРєС‚РЅС‹Рµ РіСЂР°РЅРёС†С‹!\n");
+    } else {
+        double s = sum_elements(array, begin, end);
+        printf("РЎСѓРјРјР° СЌР»РµРјРµРЅС‚РѕРІ СЃ %d РїРѕ %d = %.2f\n", begin, end, s);
     }
 
-    // Генерация массива из 100 вещественных значений
-    double x = x_start;
-    for (int i = 0; i < N; i++) {
-        arr[i] = calculate_y(x);
-        x += step;
+  
+    double value;
+    printf("\nР’РІРµРґРёС‚Рµ Р·РЅР°С‡РµРЅРёРµ РґР»СЏ РїРѕРёСЃРєР° > ");
+    if (scanf("%lf", &value) != 1) {
+        printf("РћС€РёР±РєР° РІРІРѕРґР° Р·РЅР°С‡РµРЅРёСЏ!\n");
+        return 1;
     }
-
-    // 3) Результаты оформить в виде таблицы
-    printf("\n--------------------------------------------------\n");
-    printf("| %-10s | %-25s |\n", "x", "f(x)");
-    printf("--------------------------------------------------\n");
-
-    x = x_start;
-    for (int i = 0; i < N; i++) {
-        if (i < 5 || i >= N - 5 || i % 10 == 0) {
-            printf("| %-10.4f | %-25.4f |\n", x, arr[i]);
-        }
-        else if (i == 5) {
-            printf("| ...        | ...                       |\n");
-        }
-        x += step;
+    int idx = find_element(array, size, value);
+    if (idx == -1) {
+        printf("Р­Р»РµРјРµРЅС‚ %.2f РЅРµ РЅР°Р№РґРµРЅ.\n", value);
+    } else {
+        printf("Р­Р»РµРјРµРЅС‚ %.2f РЅР°Р№РґРµРЅ РїРѕ РёРЅРґРµРєСЃСѓ %d (array[%d] = %.2f).\n",
+               value, idx, idx, array[idx]);
     }
-    printf("--------------------------------------------------\n");
-
-    // Статистика
-    double sum_pos = 0.0, sum_neg = 0.0;
-    int count_pos = 0, count_neg = 0;
-
-    for (int i = 0; i < N; i++) {
-        if (arr[i] > 0) {
-            sum_pos += arr[i];
-            count_pos++;
-        }
-        else if (arr[i] < 0) {
-            sum_neg += arr[i];
-            count_neg++;
-        }
-    }
-
-    // Вычисление средних значений
-    double avg_pos = (count_pos > 0) ? (sum_pos / count_pos) : 0.0;
-    double avg_neg = (count_neg > 0) ? (sum_neg / count_neg) : 0.0;
-
-    // Результаты вывести в виде строки
-    printf("\nРезультаты для массива arr:\n");
-    printf("Положительные элементы: накопленное значение = %.4f, количество = %d, среднее = %.4f\n", sum_pos, count_pos, avg_pos);
-    printf("Отрицательные элементы: накопленное значение = %.4f, количество = %d, среднее = %.4f\n", sum_neg, count_neg, avg_neg);
-
-    // Вычисление среднего значения всех положительных элементов массива (как просили отдельно)
-    printf("\nСреднее значение всех положительных элементов массива: %.4f\n", avg_pos);
 
     return 0;
 }
