@@ -11,7 +11,7 @@ double* full_elements(double* ptr_array, int n) {
 }
 
 int put_elements(double* ptr_array, int n) {
-    printf("Элементы массива:\n");
+    printf("Р­Р»РµРјРµРЅС‚С‹ РјР°СЃСЃРёРІР°:\n");
     for (int i = 0; i < n; i++) {
         printf("array[%d] = %.2f\n", i, ptr_array[i]);
     }
@@ -40,9 +40,9 @@ int main(void) {
     int size;
 
    
-    printf("Введите размер массива > ");
+    printf("Р’РІРµРґРёС‚Рµ СЂР°Р·РјРµСЂ РјР°СЃСЃРёРІР° > ");
     if (scanf("%d", &size) != 1 || size <= 0 || size > N) {
-        printf("Некорректный размер массива!\n");
+        printf("РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ СЂР°Р·РјРµСЂ РјР°СЃСЃРёРІР°!\n");
         return 1;
     }
 
@@ -51,9 +51,9 @@ int main(void) {
 
 
     int type;
-    printf("\nВведите type (0 - чётные позиции, 1 - нечётные) > ");
+    printf("\nР’РІРµРґРёС‚Рµ type (0 - С‡С‘С‚РЅС‹Рµ РїРѕР·РёС†РёРё, 1 - РЅРµС‡С‘С‚РЅС‹Рµ) > ");
     if (scanf("%d", &type) != 1 || (type != 0 && type != 1)) {
-        printf("Некорректный type! Допустимо 0 или 1.\n");
+        printf("РќРµРєРѕСЂСЂРµРєС‚РЅС‹Р№ type! Р”РѕРїСѓСЃС‚РёРјРѕ 0 РёР»Рё 1.\n");
         return 1;
     }
 
@@ -63,12 +63,12 @@ int main(void) {
     }
 
     if (!exists) {
-        printf("В массиве нет позиций типа %d.\n", type);
+        printf("Р’ РјР°СЃСЃРёРІРµ РЅРµС‚ РїРѕР·РёС†РёР№ С‚РёРїР° %d.\n", type);
     }
     else {
         double mx = max_by_parity(array, size, type);
-        printf("Максимум на %s позициях = %.2f\n",
-            (type == 0) ? "чётных" : "нечётных", mx);
+        printf("РњР°РєСЃРёРјСѓРј РЅР° %s РїРѕР·РёС†РёСЏС… = %.2f\n",
+            (type == 0) ? "С‡С‘С‚РЅС‹С…" : "РЅРµС‡С‘С‚РЅС‹С…", mx);
     }
 
     return 0;
