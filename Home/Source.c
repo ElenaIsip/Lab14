@@ -1,61 +1,79 @@
-#define _CRT_SECURE_NO_WARNINGS
 #include <stdio.h>
-#include <stdlib.h> 
-#include <locale.h>
+
+#define N 1000   // максимальный размер массива
+
+
+double* full_elements(double *ptr_array, int n) {
+    for (int i = 0; i < n; i++) {
+       
+        ptr_array[i] = (i + 1) * 1.5;
+    }
+    return ptr_array;
+}
+
+
+int put_elements(double *ptr_array, int n) {
+    printf("Элементы массива:\n");
+    for (int i = 0; i < n; i++) {
+        printf("array[%d] = %.2f\n", i, ptr_array[i]);
+    }
+    return 0;
+}
+
+
+double sum_less_on_parity(double *ptr_array, int n, double A, int type) {
+    double sum = 0.0;
+
+    for (int i = 0; i < n; i++) {
+ 
+        if ((i % 2) == type) {
+           
+            if (ptr_array[i] < A) {
+                sum += ptr_array[i];
+            }
+        }
+    }
+    return sum;
+}
+
 
 int main(void) {
-    setlocale(LC_ALL, "Russian");
+    double array[N];
+    int size;
 
-    int n;
 
-    // 1. Ввод количества элементов массива
-    printf("Введите количество элементов массива (n): ");
-    if (scanf("%d", &n) != 1 || n <= 0) {
-        printf("Ошибка: n должно быть положительным целым числом.\n");
+    printf("Введите размер массива > ");
+    if (scanf("%d", &size) != 1 || size <= 0 || size > N) {
+        printf("Некорректный размер массива!\n");
         return 1;
     }
 
-    // 2. Выделение памяти под массив размера n
-    int* arr = (int*)malloc(n * sizeof(int));
+    full_elements(array, size);
+    put_elements(array, size);
 
-    // Проверка, что память успешно выделилась
-    if (arr == NULL) {
-        printf("Ошибка: не удалось выделить память под массив.\n");
+   
+    double A;
+    int type;
+
+    printf("\nВведите пороговое значение A > ");
+    if (scanf("%lf", &A) != 1) {
+        printf("Ошибка ввода A!\n");
         return 1;
     }
 
-    // 3. Ввод элементов массива с клавиатуры
-    printf("Введите %d целых чисел (положительных и отрицательных):\n", n);
-    for (int i = 0; i < n; i++) {
-        printf("arr[%d] = ", i + 1);
-        if (scanf("%d", &arr[i]) != 1) {
-            printf("Ошибка ввода числа.\n");
-            free(arr); // Освобождаем память перед выходом, чтобы не было утечек
-            return 1;
-        }
+    printf("Введите type (0 - чётные позиции, 1 - нечётные) > ");
+    if (scanf("%d", &type) != 1 || (type != 0 && type != 1)) {
+        printf("Некорректный type! Допустимо 0 или 1.\n");
+        return 1;
     }
 
-    // 4. Поиск номера последнего отрицательного элемента, делящегося на 3
-    int last_index = -1; // -1 означает, что элемент не найден
+ 
+    double result = sum_less_on_parity(array, size, A, type);
 
-    for (int i = 0; i < n; i++) {
-        // Условие: число отрицательное И делится на 3 без остатка
-        if (arr[i] < 0 && arr[i] % 3 == 0) {
-            last_index = i;
-        }
-    }
-
-    // 5. Вывод результата
-    if (last_index != -1) {
-        printf("\nНомер последнего отрицательного элемента, делящегося на 3 без остатка: %d\n", last_index + 1);
-        printf("Значение этого элемента: %d\n", arr[last_index]);
-    }
-    else {
-        printf("\nВ массиве нет отрицательных элементов, делящихся на 3 без остатка.\n");
-    }
-
-    // 6. Освобождение выделенной памяти
-    free(arr);
+    printf("\nСумма элементов < %.2f на %s позициях = %.2f\n",
+           A, 
+           (type == 0) ? "чётных" : "нечётных", 
+           result);
 
     return 0;
 }
